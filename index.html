@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Giphy assignment</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+
+<body>
+    <div id="buttons-view"></div>
+    <p></p>
+    <form id="superhero-search-form"><br>
+        <label for="add-theme">What would you like to search for today?</label><br>
+        <input type="text" id="search-input">
+        <br>
+
+        <input id="search-term" type="submit" value="search">
+    </form>
+
+
+
+    <div id="image-view"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        var topics = ['Superman', 'Batman', 'The Avengers', 'Captain Marvel', 'Iron Man']
+        var person = $(this).attr("data-person");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + person +
+            "&api_key=dc6zaTOxFJmzC&limit=10";
+
+
+        function renderButtons() {
+            $('#buttons-view').empty()
+            for (let i = 0; i < topics.length; i++) {
+                var topicsButton = $('<button>')
+                topicsButton.attr("data-person", topics[i])
+                topicsButton.text(topics[i])
+                $('#buttons-view').append(topicsButton)
+            }
+            $('#search-term').on("click", function (event) {
+                event.preventDefault();
+                var userInput = $('#search-input').val().trim();
+                topics.push(userInput);
+                renderButtons()
+                
+            });
+
+            $("button").on("click", function () {
+                var person = $(this).attr("data-person");
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                    person + "&api_key=dc6zaTOxFJmzC&limit=10";
+
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                }).then(function (response) {
+                    $('#image-view').empty()
+                    var results = response.data;
+                    for (let i = 0; i < results.length; i++) {
+                        var imageDiv = $("<div>");
+                        var rating = results[i].rating;
+                        var p = $("<p>").text("Rating:  " + rating);
+                        var searchImage = $("<img>");
+                        searchImage.attr("src", results[i].images.fixed_height.url);
+                        imageDiv.prepend(p);
+                        imageDiv.prepend(searchImage);
+
+                        $("#image-view").prepend(imageDiv)
+
+                    }
+
+                });
+            });
+
+        }
+
+        renderButtons()
+    </script>
+</body>
+
+</html>
