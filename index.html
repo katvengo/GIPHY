@@ -62,25 +62,31 @@
                     for (let i = 0; i < results.length; i++) {
                         var imageDiv = $("<div>");
                         var rating = results[i].rating;
+                        var stillImage = results[i].images.fixed_height_still;
+                        var animatedImage = results[i].images.bitly_gif_url;
                         var p = $("<p>").text("Rating:  " + rating);
                         var searchImage = $("<img>");
                         searchImage.attr("src", results[i].images.fixed_height.url);
+                        searchImage.addClass("gif")
                         imageDiv.prepend(p);
                         imageDiv.prepend(searchImage);
 
                         $("#image-view").prepend(imageDiv)
+                        $(document).on("click", ".gif", function () {
+                            var still = results[i].images.fixed_height_still.url;
+                            var animated = results[i].images.bitly_gif_url;
+                            var currentState = results[i].images.fixed_height.url;
 
-                        $(imageDiv).on("click", function () {
-                            if (searchImage.attr("src", results[i].images.fixed_height.url) === searchImage.attr("src", results[i].images.fixed_height.url)){
-                                searchImage.attr("src", results[i].images.fixed_height_still.url);
-                                console.log("I am clicked!");
-                            } else if (searchImage.attr("src", results[i].images.fixed_height_still.url) === searchImage.attr("src", results[i].images.fixed_height_still.url)){
-                                searchImage.attr("src", results[i].images.fixed_height.preview_gif.url);
-                                console.log("Still be gone!");
+                            if (currentState) {
+                                $(this).attr("src", still)
+                            } 
+                            if(still){
+                                $(this).attr("src", animated)
                             }
-                            
-                        })
+                        });
                     }
+
+
 
                 });
             });
