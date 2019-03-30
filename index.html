@@ -63,7 +63,7 @@
                         var imageDiv = $("<div>");
                         var rating = results[i].rating;
                         var stillImage = results[i].images.fixed_height_still.url;
-                        var animatedImage = results[i].images.fixed_height;
+                        var animatedImage = results[i].images.fixed_height.url;
                         var p = $("<p>").text("Rating:  " + rating);
                         var searchImage = $("<img>");
                         searchImage.attr("src", results[i].images.fixed_height.url);
@@ -80,23 +80,25 @@
 
             });
 
-            $(document.body).on("click", ".gif", function () {
-                let isPaused = $(this).data('ispaused');
-                let stillUrl = $(this).data('still');
-                let aniUrl = $(this).data('animate');
-                console.log(isPaused)
-
-                if (isPaused) {
-                    $(this).attr("src", stillUrl)
-                } else if (!isPaused) {
-                    // I cannot get this code to work and have tried multiple different times. No matter what
-                    // i do it still wont animate after I click again
-                    $(this).attr("src", aniUrl)
-                }
-
-            });
 
         }
+        $(document.body).on("click", ".gif", function () {
+            let isPaused = $(this).data('ispaused');
+            let stillUrl = $(this).data('still');
+            let aniUrl = $(this).data('animate');
+            console.log(isPaused)
+
+            if (isPaused) {
+                $(this).attr("src", stillUrl)
+                $(this).data("ispaused", false)
+
+            } else {
+                $(this).attr("src", aniUrl)
+                $(this).data("ispaused", true)
+
+            }
+
+        });
 
         renderButtons()
     </script>
