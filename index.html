@@ -62,33 +62,38 @@
                     for (let i = 0; i < results.length; i++) {
                         var imageDiv = $("<div>");
                         var rating = results[i].rating;
-                        var stillImage = results[i].images.fixed_height_still;
-                        var animatedImage = results[i].images.bitly_gif_url;
+                        var stillImage = results[i].images.fixed_height_still.url;
+                        var animatedImage = results[i].images.fixed_height;
                         var p = $("<p>").text("Rating:  " + rating);
                         var searchImage = $("<img>");
                         searchImage.attr("src", results[i].images.fixed_height.url);
+                        searchImage.attr("data-still", stillImage)
+                        searchImage.attr("data-animate", animatedImage)
+                        searchImage.attr("data-ispaused", true)
                         searchImage.addClass("gif")
                         imageDiv.prepend(p);
                         imageDiv.prepend(searchImage);
-
                         $("#image-view").prepend(imageDiv)
-                        $(document).on("click", ".gif", function () {
-                            var still = results[i].images.fixed_height_still.url;
-                            var animated = results[i].images.bitly_gif_url;
-                            var currentState = results[i].images.fixed_height.url;
-
-                            if (currentState) {
-                                $(this).attr("src", still)
-                            } else if (still){
-                                $(this).attr("src", animated)
-                            }
-                           
-                        });
                     }
 
-
-
                 });
+
+            });
+
+            $(document.body).on("click", ".gif", function () {
+                let isPaused = $(this).data('ispaused');
+                let stillUrl = $(this).data('still');
+                let aniUrl = $(this).data('animate');
+                console.log(isPaused)
+
+                if (isPaused) {
+                    $(this).attr("src", stillUrl)
+                } else if (!isPaused) {
+                    // I cannot get this code to work and have tried multiple different times. No matter what
+                    // i do it still wont animate after I click again
+                    $(this).attr("src", aniUrl)
+                }
+
             });
 
         }
