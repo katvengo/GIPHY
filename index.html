@@ -42,9 +42,10 @@
             $('#search-term').on("click", function (event) {
                 event.preventDefault();
                 var userInput = $('#search-input').val().trim();
-                topics.push(userInput);
+                topics.indexOf(userInput) === -1 ? topics.push(userInput) : console.log(
+                    "This Item already exists");
                 renderButtons()
-                
+
             });
 
             $("button").on("click", function () {
@@ -69,6 +70,16 @@
 
                         $("#image-view").prepend(imageDiv)
 
+                        $(imageDiv).on("click", function () {
+                            if (searchImage.attr("src", results[i].images.fixed_height.url) === searchImage.attr("src", results[i].images.fixed_height.url)){
+                                searchImage.attr("src", results[i].images.fixed_height_still.url);
+                                console.log("I am clicked!");
+                            } else if (searchImage.attr("src", results[i].images.fixed_height_still.url) === searchImage.attr("src", results[i].images.fixed_height_still.url)){
+                                searchImage.attr("src", results[i].images.fixed_height.preview_gif.url);
+                                console.log("Still be gone!");
+                            }
+                            
+                        })
                     }
 
                 });
